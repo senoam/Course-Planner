@@ -1,4 +1,4 @@
-package ca.cmpt213.as5;
+package ca.cmpt213.as5.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
