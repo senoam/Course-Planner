@@ -22,6 +22,10 @@ public class Course {
         componentCode = result[7];
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
     public Course(int semester) {
         this.semester = semester;
     }
