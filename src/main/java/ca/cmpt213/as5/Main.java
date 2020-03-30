@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-
-
     public static void main(String[] args) {
         List<Course> courseList = new ArrayList<>();
         ReadCSVFile read = new ReadCSVFile();
-        read.readCSV();
-        int i = 0;
-//        for (Course c : courseList) {
-//            System.out.println(courseList.size());
+        read.readCSV(courseList);
+//        for(Course s : courseList){
+//            System.out.println(s.getSubject());
 //        }
     }
 }
