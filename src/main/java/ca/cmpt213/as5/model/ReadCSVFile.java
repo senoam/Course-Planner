@@ -15,10 +15,10 @@ public class ReadCSVFile {
         BufferedReader objReader;
         String strCurrentLine;
 
-        final String smallDataCSV = "data\\small_data.csv";
-        final String courseData2018CSV = "data\\course_data_2018.csv";
+        final String SMALL_DATA_CSV = "data\\small_data.csv";
+        final String COURSE_DATA_2018_CSV = "data\\course_data_2018.csv";
         try {
-            objReader = new BufferedReader(new FileReader(courseData2018CSV));
+            objReader = new BufferedReader(new FileReader(COURSE_DATA_2018_CSV));
             int i = 0;
             while ((strCurrentLine = objReader.readLine()) != null) {
 //                System.out.println(strCurrentLine);
