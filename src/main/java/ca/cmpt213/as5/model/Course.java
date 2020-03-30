@@ -29,4 +29,32 @@ public class Course {
     public Course(int semester) {
         this.semester = semester;
     }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public String getCatalogNumber() {
+        return catalogNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public String getInstructor() {
+        return instructor;
+    }
+
+    public String getComponentCode() {
+        return componentCode;
+    }
 }
