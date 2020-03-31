@@ -11,8 +11,8 @@ public class Main {
         List<Course> courseList = new ArrayList<>();
         ReadCSVFile read = new ReadCSVFile();
         read.readCSV(courseList);
-//        for(Course s : courseList){
-//            System.out.println(s.getSubject());
-//        }
+        for(Course s : courseList){
+            System.out.println(s.getInstructor());
+        }
     }
 }
