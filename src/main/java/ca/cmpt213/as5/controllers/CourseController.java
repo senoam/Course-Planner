@@ -69,7 +69,7 @@ public class CourseController {
                 System.out.println("\t" + c.getSemester() + " in " + c.getLocation() + " by " +
                         c.getInstructor());
             }
-            if (!c.getComponentCode().equals(currentComponent)) {
+            if (!c.getComponentCode().equals("LAB")) {
                 if (currentComponent.equals("LAB")) {
                     System.out.println("\t\t" + "Type=" + currentComponent + ", Enrollment=" +
                             totalLab + "/" + labCapacity);

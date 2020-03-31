@@ -37,6 +37,20 @@
             Create Watcher
         </button>
     </p>
+    <div v-if="selectedCourse">
+        <h3>New Offering / Section</h3>
+        <input v-model="new_semester" placeholder="Semester"/>
+        <input v-model="new_location" placeholder="Location"/>
+        <input v-model="new_instructor" placeholder="Instructor"/>
+        <br/>
+        <input v-model="new_component" placeholder="Component"/>
+        <input v-model="new_enrollmentTotal" placeholder="Enrollment"/>
+        <input v-model="new_enrollmentCap" placeholder="Cap"/>
+
+        <button type="button" v-on:click="makeNewSection()">
+            Create Section
+        </button>
+    </div>
 
 
     <div id="right">

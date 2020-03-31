@@ -11,6 +11,12 @@ const myAppObj = new Vue({
         courses: [],
         selectedCourse: null,
 
+        new_semester: '',
+        new_location: '',
+        new_enrollmentTotal: '',
+        new_enrollmentCap: '',
+        new_component: '',
+        new_instructor: '',
     },
     methods: {
         selectWatcher: function(watcher) {
@@ -21,6 +27,19 @@ const myAppObj = new Vue({
             serverCreateWatcher(
                 myAppObj.selectedDept.deptId,
                 myAppObj.selectedCourse.courseId);
+        },
+        makeNewSection: function() {
+            serverCreateSection(
+                myAppObj.new_semester,
+                myAppObj.selectedDept.name,
+                myAppObj.selectedCourse.catalogNumber,
+                myAppObj.new_location,
+                myAppObj.new_enrollmentCap,
+                myAppObj.new_component,
+                myAppObj.new_enrollmentTotal,
+                myAppObj.new_instructor
+            );
+            myAppObj.selectedWatcher = null;
         },
     },
     watch: {
@@ -80,5 +99,36 @@ function serverCreateWatcher(deptId, courseId) {
       })
       .catch(function (error) {
         console.log(error);
+      });
+}
+function serverCreateSection(
+    semester,
+    subjectName,
+    catalogNumber,
+    location,
+    enrollmentCap,
+    component,
+    enrollmentTotal,
+    instructor
+) {
+    axios.post('/api/addoffering', {
+        semester: semester,
+        subjectName: subjectName,
+        catalogNumber: catalogNumber,
+        location: location,
+        enrollmentCap: enrollmentCap,
+        component: component,
+        enrollmentTotal: enrollmentTotal,
+        instructor: instructor
+      })
+      .then(function (response) {
+        console.log(response);
+        loadWatchers();
+      })
+      .catch(function (error) {
+        console.log(error);
+        window.alert("Add offering/section failed: "
+            + error
+        );
       });
 }
