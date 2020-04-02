@@ -43,7 +43,7 @@ public class CourseController {
         comparator = comparator.thenComparing(Comparator.comparing(Course::getCatalogNumber));
         comparator = comparator.thenComparing(Comparator.comparing(Course::getSemester));
         comparator = comparator.thenComparing(Comparator.comparing(Course::getInstructor));
-        comparator = comparator.thenComparing(Comparator.comparing(Course::getComponentCode));
+//        comparator = comparator.thenComparing(Comparator.comparing(Course::getComponentCode));
         Stream<Course> personStream = courseList.stream().sorted(comparator);
         sortedCourse = personStream.collect(Collectors.toList());
 
@@ -85,6 +85,10 @@ public class CourseController {
                 totalLab = totalLab + c.getTotal();
             }
 
+        }
+
+        for(Course s : sortedCourse){
+            System.out.println(s.getSubject() + " " + s.getCatalogNumber() + " " + s.getSemester());
         }
 
     }
