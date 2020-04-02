@@ -12,7 +12,7 @@ public class Main {
         ReadCSVFile read = new ReadCSVFile();
         read.readCSV(courseList);
         for(Course s : courseList){
-            System.out.println(s.getSubject());
+            System.out.println(s.getInstructor());
         }
     }
 }

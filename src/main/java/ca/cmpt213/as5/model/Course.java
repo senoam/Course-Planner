@@ -10,6 +10,10 @@ public class Course {
     private String instructor;
     private String componentCode;
 
+    public String getInstructor() {
+        return instructor;
+    }
+
     public Course(String strCurrentLine) {
         //Reference to split : https://stackoverflow.com/questions/18893390/splitting-on-comma-outside-quotes
         String[] result = strCurrentLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -29,7 +33,7 @@ public class Course {
         }
         else {
             dataInstructor = dataInstructor.replace(" ", "");
-
+            ;
             int size = dataInstructor.length();
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < size - 1; i++) {
@@ -42,39 +46,5 @@ public class Course {
             instructor = result.toString();
         }
     }
-    public Course(int semester) {
-        this.semester = semester;
-    }
 
-    public int getSemester() {
-        return semester;
-    }
-
-    public String getCatalogNumber() {
-        return catalogNumber;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public String getInstructor() {
-        return instructor;
-    }
-
-    public String getComponentCode() {
-        return componentCode;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
 }
