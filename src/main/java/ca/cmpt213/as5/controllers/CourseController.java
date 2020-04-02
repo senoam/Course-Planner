@@ -87,9 +87,9 @@ public class CourseController {
 
         }
 
-        for(Course s : sortedCourse){
-            System.out.println(s.getSubject() + " " + s.getCatalogNumber() + " " + s.getSemester());
-        }
+//        for(Course s : sortedCourse){
+//            System.out.println(s.getSubject() + " " + s.getCatalogNumber() + " " + s.getSemester());
+//        }
 
     }
 

@@ -47,4 +47,31 @@ public class Course {
         }
     }
 
+    public int getSemester() {
+        return semester;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getCatalogNumber() {
+        return catalogNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public String getComponentCode() {
+        return componentCode;
+    }
 }
