@@ -1,6 +1,7 @@
 package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.Course;
+import ca.cmpt213.as5.model.CourseManager;
 import ca.cmpt213.as5.model.ReadCSVFile;
 import ca.cmpt213.as5.restapi.ApiAboutWrapper;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ public class CourseController {
     List<Course> courseList = new ArrayList<>();
     List<Course> sortedCourse;
     ReadCSVFile read = new ReadCSVFile();
+    CourseManager manager;
 
     class sortByCourse implements Comparator<Course> {
         @Override
@@ -35,7 +37,7 @@ public class CourseController {
 
     @GetMapping("/dump-model")
     public void dumpModel() {
-        read.readCSV(courseList);
+        read.readCSV(manager);
 
 //        courseList.sort(new sortByCourse());
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
