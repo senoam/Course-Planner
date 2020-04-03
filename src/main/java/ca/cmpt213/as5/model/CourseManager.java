@@ -10,6 +10,10 @@ public class CourseManager {
         return subjects;
     }
 
+    public void setSubjects(List<CourseSubject> subjects) {
+        this.subjects = subjects;
+    }
+
     public void add(String strCurrentLine) {
         //Reference to split : https://stackoverflow.com/questions/18893390/splitting-on-comma-outside-quotes
         String[] result = strCurrentLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
