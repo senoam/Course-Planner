@@ -10,7 +10,6 @@ public class CourseManager {
         return subjects;
     }
 
-
     public void add(String strCurrentLine) {
         //Reference to split : https://stackoverflow.com/questions/18893390/splitting-on-comma-outside-quotes
         String[] result = strCurrentLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -37,12 +36,13 @@ public class CourseManager {
                         for (CourseOffering offering : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList()) {
                             if (offering.equals(newOffering)) {
                                 int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().indexOf(offering);
-//                                for (OfferingDetails details : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList()) {
-////                                    if (details.equals(newDetails)) { //TODO tambahin component
-////                                        subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList().add(newDetails);
-////                                        return;
-////                                    }
-//                                }
+                                for (OfferingDetails details : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList()) {
+                                    if (details.equals(newDetails)) {
+                                        details.setTotal(newDetails.getTotal() + details.getTotal());
+                                        details.setCapacity(newDetails.getCapacity() + details.getCapacity());
+                                        return;
+                                    }
+                                }
                                 subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList().add(newDetails);
                                 return;
                             }
@@ -61,13 +61,10 @@ public class CourseManager {
                 return;
             }
         }
-//        int catalogIndex = subjects.get(getIndex(new )).getCatalogList().indexOf(catalog);
         subjects.add(newSubject);
         subjects.get(getIndex(newSubject)).getCatalogList().add(newCatalog);
-////        subjects.get(getIndex(newSubject)).getCatalogList().get(0).getOfferingList().add(newOffering);
         subjects.get(getIndex(newSubject)).getCatalogList().
                 get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).getOfferingList().add(newOffering);
-//
         subjects.get(getIndex(newSubject)).getCatalogList().
                 get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).
                 getOfferingList().get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).getOfferingDetailsList().add(newDetails);

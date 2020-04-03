@@ -1,9 +1,9 @@
 package ca.cmpt213.as5.model;
 
 public class OfferingDetails {
-    String componentCode;
-    int total;
-    int capacity;
+    private String componentCode;
+    private int total;
+    private int capacity;
 
     public OfferingDetails(String componentCode, int total, int capacity) {
         this.componentCode = componentCode;
@@ -22,8 +22,7 @@ public class OfferingDetails {
 
         OfferingDetails c = (OfferingDetails) obj;
 
-        return c.getComponentCode().equals(componentCode) && c.getTotal() == total
-                && c.getCapacity() == capacity;
+        return c.getComponentCode().equals(componentCode);
     }
 
     public String getComponentCode() {
@@ -36,5 +35,13 @@ public class OfferingDetails {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }
