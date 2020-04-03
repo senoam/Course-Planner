@@ -28,36 +28,7 @@ public class CourseManager {
         OfferingDetails newDetails = new OfferingDetails(componentCode, total, capacity);
         for (CourseSubject c : subjects) {
             //Check Duplicate Subject
-            if (c.equals(newSubject)) {
-                for (CourseCatalog catalog : subjects.get(getIndex(c)).getCatalogList()) {
-                    //Check duplicate catalog
-                    if (catalog.equals(newCatalog)) {
-                        int catalogIndex = subjects.get(getIndex(c)).getCatalogList().indexOf(catalog);
-                        for (CourseOffering offering : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList()) {
-                            if (offering.equals(newOffering)) {
-                                int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().indexOf(offering);
-                                for (OfferingDetails details : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList()) {
-                                    if (details.equals(newDetails)) {
-                                        details.setTotal(newDetails.getTotal() + details.getTotal());
-                                        details.setCapacity(newDetails.getCapacity() + details.getCapacity());
-                                        return;
-                                    }
-                                }
-                                subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList().add(newDetails);
-                                return;
-                            }
-                        }
-                        subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().add(newOffering);
-                        int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().size() - 1;
-                        subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList().add(newDetails);
-                        return;
-                    }
-                }
-                subjects.get(getIndex(c)).getCatalogList().add(newCatalog);
-                int catalogIndex = subjects.get(getIndex(c)).getCatalogList().size() - 1;
-                subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().add(newOffering);
-                int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().size() - 1;
-                subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).getOfferingDetailsList().add(newDetails);
+            if (checkSubjectDuplicate(newSubject, newCatalog, newOffering, newDetails, c)) {
                 return;
             }
         }
@@ -67,9 +38,75 @@ public class CourseManager {
                 get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).getOfferingList().add(newOffering);
         subjects.get(getIndex(newSubject)).getCatalogList().
                 get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).
-                getOfferingList().get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).getOfferingDetailsList().add(newDetails);
+                getOfferingList().get(subjects.get(getIndex(newSubject)).getIndex(newCatalog)).
+                getOfferingDetailsList().add(newDetails);
 
 
+    }
+
+    private boolean checkSubjectDuplicate(CourseSubject newSubject, CourseCatalog newCatalog, CourseOffering newOffering,
+                                          OfferingDetails newDetails, CourseSubject c) {
+        if (c.equals(newSubject)) {
+            for (CourseCatalog catalog : subjects.get(getIndex(c)).getCatalogList()) {
+                //Check duplicate catalog
+                if (checkCatalogDuplicate(newCatalog, newOffering, newDetails, c, catalog)) {
+                    return true;
+                }
+            }
+            subjects.get(getIndex(c)).getCatalogList().add(newCatalog);
+            int catalogIndex = subjects.get(getIndex(c)).getCatalogList().size() - 1;
+            subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().add(newOffering);
+            int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().size() - 1;
+            subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).
+                    getOfferingDetailsList().add(newDetails);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkCatalogDuplicate(CourseCatalog newCatalog, CourseOffering newOffering, OfferingDetails newDetails,
+                                          CourseSubject c, CourseCatalog catalog) {
+        if (catalog.equals(newCatalog)) {
+            int catalogIndex = subjects.get(getIndex(c)).getCatalogList().indexOf(catalog);
+            for (CourseOffering offering : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList()) {
+                if (checkOfferingDuplicate(newOffering, newDetails, c, catalogIndex, offering)) {
+                    return true;
+                }
+            }
+            subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().add(newOffering);
+            int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().size() - 1;
+            subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).
+                    getOfferingDetailsList().add(newDetails);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOfferingDuplicate(CourseOffering newOffering, OfferingDetails newDetails, CourseSubject c, int catalogIndex,
+                                           CourseOffering offering) {
+        if (offering.equals(newOffering)) {
+            int offeringIndex = subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().
+                    indexOf(offering);
+            for (OfferingDetails details : subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).
+                    getOfferingList().get(offeringIndex).getOfferingDetailsList()) {
+                if (checkDetailsDuplicate(newDetails, details)) {
+                    return true;
+                }
+            }
+            subjects.get(getIndex(c)).getCatalogList().get(catalogIndex).getOfferingList().get(offeringIndex).
+                    getOfferingDetailsList().add(newDetails);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkDetailsDuplicate(OfferingDetails newDetails, OfferingDetails details) {
+        if (details.equals(newDetails)) {
+            details.setTotal(newDetails.getTotal() + details.getTotal());
+            details.setCapacity(newDetails.getCapacity() + details.getCapacity());
+            return true;
+        }
+        return false;
     }
 
     public int getIndex(CourseSubject mySubject) {

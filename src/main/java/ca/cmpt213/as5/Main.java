@@ -16,6 +16,6 @@ public class Main {
         for(Course s : courseList){
             System.out.println(s.getInstructor());
         }
-        System.out.println("ghehe");
+
     }
 }
