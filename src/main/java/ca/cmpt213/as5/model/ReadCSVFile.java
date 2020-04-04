@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReadCSVFile {
-    public void readCSV(List<Course> courses){
+    public void readCSV(CourseManager manager){
         BufferedReader objReader;
         String strCurrentLine;
 
@@ -23,7 +23,7 @@ public class ReadCSVFile {
             while ((strCurrentLine = objReader.readLine()) != null) {
 //                System.out.println(strCurrentLine);
                 if(i != 0){
-                    courses.add(new Course(strCurrentLine));
+                    manager.add(strCurrentLine);
                 }
                 i++;
             }
