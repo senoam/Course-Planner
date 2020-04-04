@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/** CourseSubject holds subject name and the list of course catalog (e.g CMPT 213, CMPT 225)*/
 public class CourseSubject {
     private List<CourseCatalog> catalogList = new ArrayList<>();
     private List<CourseCatalog> sortedList;

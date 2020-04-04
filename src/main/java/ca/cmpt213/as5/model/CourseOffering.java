@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**Course Offering contains the semester, instruction and location of a class and also a list of offering details */
 public class CourseOffering {
     private List<OfferingDetails> offeringDetailsList = new ArrayList<>();
     private int semester;

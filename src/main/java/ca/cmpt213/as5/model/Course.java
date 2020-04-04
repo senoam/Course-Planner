@@ -1,5 +1,6 @@
 package ca.cmpt213.as5.model;
 
+/** Omit this class * */
 public class Course {
     private int semester;
     private String subject;

@@ -24,11 +24,11 @@ public class CourseController {
     }
 
 
-    @GetMapping("/dump-model")
+    @GetMapping("/api/dump-model")
     public void dumpModel() {
         read.readCSV(manager);
 
-        //Sort by courseoffering
+        //Sort by course offering
         for (int i = 0; i < manager.getSubjects().size(); i++) {
             manager.sortByCourseName();
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
@@ -40,17 +40,26 @@ public class CourseController {
         }
 
         for (int i = 0; i < manager.getSubjects().size(); i++) {
+
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
                 System.out.print(manager.getSubjects().get(i).getSubjectName());
                 System.out.println(" " + manager.getSubjects().get(i).getCatalogList().get(j).getCatalogNumber());
+
                 for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
-                    System.out.println("\t" + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getSemester() +
-                            " in " + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getLocation() +
+                    System.out.println("\t" + manager.getSubjects().get(i).getCatalogList().get(j).
+                            getOfferingList().get(k).getSemester() + " in " +
+                            manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getLocation() +
                             " by " + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getInstructor());
-                    for (int l = 0; l < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().size(); l++) {
-                        System.out.println("\t\t" + "Type=" + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().get(l).getComponentCode() + ", Enrollment=" +
-                                manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().get(l).getTotal() + "/" +
-                                manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().get(l).getCapacity());
+
+                    for (int l = 0;
+                         l < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().size();
+                         l++) {
+                        System.out.println("\t\t" + "Type=" + manager.getSubjects().get(i).getCatalogList().get(j).
+                                getOfferingList().get(k).getOfferingDetailsList().get(l).getComponentCode() + ", Enrollment=" +
+                                manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
+                                        getOfferingDetailsList().get(l).getTotal() + "/" +
+                                manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
+                                        getOfferingDetailsList().get(l).getCapacity());
                     }
                 }
             }

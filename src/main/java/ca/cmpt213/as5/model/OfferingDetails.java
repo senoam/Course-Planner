@@ -1,5 +1,7 @@
 package ca.cmpt213.as5.model;
 
+/** Offering details class contains the class details, such as the capacity
+ *  and whether it's a lecture/tutorial/lab/etc */
 public class OfferingDetails {
     private String componentCode;
     private int total;

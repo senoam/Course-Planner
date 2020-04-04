@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**Course catalog stores the catalog number and has a list of offerings*/
 public class CourseCatalog {
     private List<CourseOffering> offeringList = new ArrayList<>();
     private List<CourseOffering> sortedList;
