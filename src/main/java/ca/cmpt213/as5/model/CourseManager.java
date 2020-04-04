@@ -1,17 +1,28 @@
 package ca.cmpt213.as5.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CourseManager {
-    List<CourseSubject> subjects = new ArrayList<>();
-
+    private List<CourseSubject> subjects = new ArrayList<>();
+    private List<CourseSubject> sortedList;
     public List<CourseSubject> getSubjects() {
         return subjects;
     }
 
     public void setSubjects(List<CourseSubject> subjects) {
         this.subjects = subjects;
+    }
+
+    public void sortByCourseName() {
+        //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
+        Comparator<CourseSubject> comparator = Comparator.comparing(CourseSubject::getSubjectName);
+        Stream<CourseSubject> personStream = subjects.stream().sorted(comparator);
+        sortedList = personStream.collect(Collectors.toList());
+        subjects = sortedList;
     }
 
     public void add(String strCurrentLine) {
