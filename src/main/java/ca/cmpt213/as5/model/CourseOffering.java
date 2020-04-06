@@ -6,12 +6,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**Course Offering contains the semester, instruction and location of a class and also a list of offering details */
+/**
+ * Course Offering contains the semester, instruction and location of a class and also a list of offering details
+ */
 public class CourseOffering {
     private List<OfferingDetails> offeringDetailsList = new ArrayList<>();
     private int semester;
     private String instructor;
     private String location;
+
+    public void setOfferingDetailsList(List<OfferingDetails> offeringDetailsList) {
+        this.offeringDetailsList = offeringDetailsList;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public CourseOffering(int semester, String instructor, String location) {
         this.semester = semester;

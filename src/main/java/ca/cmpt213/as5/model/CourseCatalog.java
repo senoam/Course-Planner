@@ -17,6 +17,14 @@ public class CourseCatalog {
     }
 
 
+    public void setOfferingList(List<CourseOffering> offeringList) {
+        this.offeringList = offeringList;
+    }
+
+    public void setCatalogNumber(String catalogNumber) {
+        this.catalogNumber = catalogNumber;
+    }
+
     public void sortOfferingList() {
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
         Comparator<CourseOffering> comparator = Comparator.comparing(CourseOffering::getSemester);

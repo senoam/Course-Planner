@@ -2,8 +2,9 @@ package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
 import ca.cmpt213.as5.restapi.ApiAboutWrapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import ca.cmpt213.as5.restapi.ApiOfferingDataWrapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,13 +14,13 @@ import java.util.stream.Stream;
 
 @RestController
 public class CourseController {
-    ApiAboutWrapper aboutWrapper = new ApiAboutWrapper("Course Planner",
-                                    "Christofer Calvin Kurniawan & Seno Adhi Muhammad");
     ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
 
     @GetMapping("/api/about")
     public ApiAboutWrapper about() {
+        ApiAboutWrapper aboutWrapper = new ApiAboutWrapper("Course Planner",
+                "Christofer Calvin Kurniawan & Seno Adhi Muhammad");
         return aboutWrapper;
     }
 
@@ -65,6 +66,16 @@ public class CourseController {
             }
         }
 
+    }
+
+    @PostMapping("/api/addoffering")
+    @ResponseStatus(HttpStatus.CREATED)
+    public HttpStatus addOffering(@RequestBody String input) {
+        //ApiOfferingDataWrapper wrapper = new ApiOfferingDataWrapper();
+
+
+        manager.add(input);
+        return HttpStatus.CREATED;
     }
 
 }

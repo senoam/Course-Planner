@@ -13,6 +13,10 @@ public class OfferingDetails {
         this.capacity = capacity;
     }
 
+    public void setComponentCode(String componentCode) {
+        this.componentCode = componentCode;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
