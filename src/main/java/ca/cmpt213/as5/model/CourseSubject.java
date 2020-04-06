@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 
 /** CourseSubject holds subject name and the list of course catalog (e.g CMPT 213, CMPT 225)*/
 public class CourseSubject {
+    private String subjectName;
     private List<CourseCatalog> catalogList = new ArrayList<>();
     private List<CourseCatalog> sortedList;
-    private String subjectName;
 
     public CourseSubject(String subjectName) {
         this.subjectName = subjectName;
