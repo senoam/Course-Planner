@@ -2,16 +2,16 @@ package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
 import ca.cmpt213.as5.restapi.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ca.cmpt213.as5.restapi.ApiAboutWrapper;
-import ca.cmpt213.as5.restapi.ApiOfferingDataWrapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,6 @@ public class CourseController {
     List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
     List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
     List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
-
 
 
     @GetMapping("/api/about")
@@ -41,14 +40,14 @@ public class CourseController {
             return subjectWrapperList;
         }
         for (int i = 0; i < manager.getSubjects().size(); i++) {
-            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i),i, manager.getSubjects().get(i).getCatalogList()));
+            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i), i, manager.getSubjects().get(i).getCatalogList()));
 
         }
         return subjectWrapperList;
     }
 
     @GetMapping("api/departments/{id}/courses")
-    public List<ApiCourseWrapper> getCourseAtId(@PathVariable("id")long id) {
+    public List<ApiCourseWrapper> getCourseAtId(@PathVariable("id") long id) {
         if (id > subjectWrapperList.size()) {
             throw new NotFound("Cannot find id");
         }
@@ -57,7 +56,7 @@ public class CourseController {
     }
 
     @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
-    public List<ApiCourseOfferingWrapper> getCourseAtOffering(@PathVariable("id")long id, @PathVariable("courseId")long courseId) {
+    public List<ApiCourseOfferingWrapper> getCourseAtOffering(@PathVariable("id") long id, @PathVariable("courseId") long courseId) {
         if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
             throw new NotFound("Cannot find id");
         }
@@ -66,8 +65,8 @@ public class CourseController {
     }
 
     @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
-    public List<ApiOfferingDetailsWrapper> getCourseAtOfferingDetails(@PathVariable("id")long id, @PathVariable("courseId")long courseId,
-                                                                      @PathVariable("offeringId")long offeringId) {
+    public List<ApiOfferingDetailsWrapper> getCourseAtOfferingDetails(@PathVariable("id") long id, @PathVariable("courseId") long courseId,
+                                                                      @PathVariable("offeringId") long offeringId) {
         if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
             throw new NotFound("Cannot find id");
         }
@@ -110,6 +109,23 @@ public class CourseController {
         }
     }
 
+    @PostMapping("/api/addoffering")
+    @ResponseStatus(HttpStatus.CREATED)
+    public HttpStatus addOffering(@RequestBody ApiOfferingDataWrapper wrapper) {
+        String input =
+                wrapper.semester +
+                        "," + wrapper.subjectName +
+                        "," + wrapper.catalogNumber +
+                        "," + wrapper.location +
+                        "," + wrapper.enrollmentCap +
+                        "," + wrapper.enrollmentTotal +
+                        "," + wrapper.instructor +
+                        "," + wrapper.component;
+        manager.add(input);
+        return HttpStatus.CREATED;
+    }
+
+
     private void sortCourseData() {
         for (int i = 0; i < manager.getSubjects().size(); i++) {
             manager.sortByCourseName();
@@ -124,7 +140,9 @@ public class CourseController {
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     static class NotFound extends RuntimeException {
-        public NotFound(){}
+        public NotFound() {
+        }
+
         public NotFound(String str) {
             super((str));
         }
@@ -132,19 +150,14 @@ public class CourseController {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     static class BadRequest extends RuntimeException {
-        public BadRequest(){}
-        public BadRequest(String str) {super((str));}
+        public BadRequest() {
+        }
+
+        public BadRequest(String str) {
+            super((str));
+        }
+
     }
 
-
-    @PostMapping("/api/addoffering")
-    @ResponseStatus(HttpStatus.CREATED)
-    public HttpStatus addOffering(@RequestBody String input) {
-        //ApiOfferingDataWrapper wrapper = new ApiOfferingDataWrapper();
-
-
-        manager.add(input);
-        return HttpStatus.CREATED;
-    }
 
 }

@@ -1,7 +1,9 @@
 package ca.cmpt213.as5.restapi;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 public class ApiOfferingDataWrapper {
-    public String semester;
+    public int semester;
     public String subjectName;
     public String catalogNumber;
     public String location;
@@ -10,8 +12,7 @@ public class ApiOfferingDataWrapper {
     public int enrollmentTotal;
     public String instructor;
 
-
-    public ApiOfferingDataWrapper(String semester, String subjectName, String catalogNumber, String location,
+    public ApiOfferingDataWrapper(int semester, String subjectName, String catalogNumber, String location,
                                   int enrollmentCap, String component, int enrollmentTotal, String instructor) {
         this.semester = semester;
         this.subjectName = subjectName;
