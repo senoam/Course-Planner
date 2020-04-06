@@ -1,43 +1,83 @@
 package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
-import ca.cmpt213.as5.restapi.ApiAboutWrapper;
+import ca.cmpt213.as5.restapi.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 public class CourseController {
-    ApiAboutWrapper aboutWrapper = new ApiAboutWrapper("Course Planner",
-                                    "Christofer Calvin Kurniawan & Seno Adhi Muhammad");
+    ApiAboutWrapper aboutWrapper;
     ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
+    List<ApiSubjectWrapper> subjectWrapperList = new ArrayList<>();
+    List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
+    List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
+    List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
+
+
 
     @GetMapping("/api/about")
     public ApiAboutWrapper about() {
+        aboutWrapper = new ApiAboutWrapper("Course Planner",
+                "Christofer Calvin Kurniawan & Seno Adhi Muhammad");
         return aboutWrapper;
+    }
+
+    @GetMapping("/api/departments")
+    public List<ApiSubjectWrapper> getCourseList() {
+        sortCourseData();
+        if (subjectWrapperList.size() >= manager.getSubjects().size()) {
+            return subjectWrapperList;
+        }
+        for (int i = 0; i < manager.getSubjects().size(); i++) {
+            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i),i, manager.getSubjects().get(i).getCatalogList()));
+
+        }
+        return subjectWrapperList;
+    }
+
+    @GetMapping("api/departments/{id}/courses")
+    public List<ApiCourseWrapper> getCourseAtId(@PathVariable("id")long id) {
+        if (id > subjectWrapperList.size()) {
+            throw new NotFound("Cannot find id");
+        }
+        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
+        return courseWrappers;
+    }
+
+    @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
+    public List<ApiCourseOfferingWrapper> getCourseAtOffering(@PathVariable("id")long id, @PathVariable("courseId")long courseId) {
+        if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
+            throw new NotFound("Cannot find id");
+        }
+        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
+        return courseOfferingWrapperList;
+    }
+
+    @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
+    public List<ApiOfferingDetailsWrapper> getCourseAtOfferingDetails(@PathVariable("id")long id, @PathVariable("courseId")long courseId,
+                                                                      @PathVariable("offeringId")long offeringId) {
+        if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
+            throw new NotFound("Cannot find id");
+        }
+        offeringDetailsWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).
+                courseOfferingWrapperList.get((int) offeringId).offeringDetailsWrapperList;
+        return offeringDetailsWrapperList;
     }
 
 
     @GetMapping("/api/dump-model")
     public void dumpModel() {
         read.readCSV(manager);
-
         //Sort by course offering
-        for (int i = 0; i < manager.getSubjects().size(); i++) {
-            manager.sortByCourseName();
-            for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
-                manager.getSubjects().get(i).sortByCatalogNumber();
-                for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
-                    manager.getSubjects().get(i).getCatalogList().get(j).sortOfferingList();
-                }
-            }
-        }
+        sortCourseData();
 
         for (int i = 0; i < manager.getSubjects().size(); i++) {
 
@@ -64,7 +104,33 @@ public class CourseController {
                 }
             }
         }
-
     }
+
+    private void sortCourseData() {
+        for (int i = 0; i < manager.getSubjects().size(); i++) {
+            manager.sortByCourseName();
+            for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
+                manager.getSubjects().get(i).sortByCatalogNumber();
+                for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
+                    manager.getSubjects().get(i).getCatalogList().get(j).sortOfferingList();
+                }
+            }
+        }
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    static class NotFound extends RuntimeException {
+        public NotFound(){}
+        public NotFound(String str) {
+            super((str));
+        }
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    static class BadRequest extends RuntimeException {
+        public BadRequest(){}
+        public BadRequest(String str) {super((str));}
+    }
+
 
 }
