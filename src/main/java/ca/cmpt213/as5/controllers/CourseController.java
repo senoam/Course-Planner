@@ -2,6 +2,8 @@ package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
 import ca.cmpt213.as5.restapi.ApiAboutWrapper;
+import ca.cmpt213.as5.restapi.ApiCourseOfferingWrapper;
+import ca.cmpt213.as5.restapi.ApiCourseWrapper;
 import ca.cmpt213.as5.restapi.ApiSubjectWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,17 +12,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 public class CourseController {
     ApiAboutWrapper aboutWrapper;
     ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
-    List<ApiSubjectWrapper> subjectWrapper = new ArrayList<>();
+    List<ApiSubjectWrapper> subjectWrapperList = new ArrayList<>();
+    List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
+    List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
 
 
 
@@ -34,21 +35,32 @@ public class CourseController {
     @GetMapping("/api/departments")
     public List<ApiSubjectWrapper> getCourseList() {
         sortCourseData();
-        if (subjectWrapper.size() >= manager.getSubjects().size()) {
-            return subjectWrapper;
+        if (subjectWrapperList.size() >= manager.getSubjects().size()) {
+            return subjectWrapperList;
         }
         for (int i = 0; i < manager.getSubjects().size(); i++) {
-            subjectWrapper.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i),i));
+            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i),i, manager.getSubjects().get(i).getCatalogList()));
+
         }
-        return subjectWrapper;
+        return subjectWrapperList;
     }
 
     @GetMapping("api/departments/{id}/courses")
-    public ApiSubjectWrapper getCourseAtId(@PathVariable("id")long id) {
-        if (id > subjectWrapper.size()) {
+    public List<ApiCourseWrapper> getCourseAtId(@PathVariable("id")long id) {
+        if (id > subjectWrapperList.size()) {
             throw new NotFound("Cannot find id");
         }
-        return subjectWrapper.get((int) id);
+        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
+        return courseWrappers;
+    }
+
+    @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
+    public List<ApiCourseOfferingWrapper> getCourseAtOffering(@PathVariable("id")long id, @PathVariable("courseId")long courseId) {
+        if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
+            throw new NotFound("Cannot find id");
+        }
+        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
+        return courseOfferingWrapperList;
     }
 
 
