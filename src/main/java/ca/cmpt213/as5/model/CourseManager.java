@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class CourseManager {
     private List<CourseSubject> subjects = new ArrayList<>();
-    private List<CourseSubject> sortedList;
+
     public List<CourseSubject> getSubjects() {
         return subjects;
     }
@@ -19,16 +19,16 @@ public class CourseManager {
 
     public void sortByCourseName() {
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
-        Comparator<CourseSubject> comparator = Comparator.comparing(CourseSubject::getSubjectName);
+        Comparator<CourseSubject> comparator = Comparator.comparing(CourseSubject::getName);
         Stream<CourseSubject> personStream = subjects.stream().sorted(comparator);
-        sortedList = personStream.collect(Collectors.toList());
+        List<CourseSubject> sortedList = personStream.collect(Collectors.toList());
         subjects = sortedList;
     }
 
     public void add(String strCurrentLine) {
         //Reference to split : https://stackoverflow.com/questions/18893390/splitting-on-comma-outside-quotes
         String[] result = strCurrentLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-        int semester = Integer.parseInt(result[0]);
+        long semester = Integer.parseInt(result[0]);
         String subjectName = result[1].replace(" ", "");
         String catalogNumber = result[2].replace(" ", "");
         String location = result[3].replace(" ", "");
@@ -117,8 +117,8 @@ public class CourseManager {
 
     private boolean checkDetailsDuplicate(OfferingDetails newDetails, OfferingDetails details) {
         if (details.equals(newDetails)) {
-            details.setTotal(newDetails.getTotal() + details.getTotal());
-            details.setCapacity(newDetails.getCapacity() + details.getCapacity());
+            details.setEnrollmentTotal(newDetails.getEnrollmentTotal() + details.getEnrollmentTotal());
+            details.setEnrollmentCap(newDetails.getEnrollmentCap() + details.getEnrollmentCap());
             return true;
         }
         return false;

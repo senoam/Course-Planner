@@ -8,26 +8,42 @@ import java.util.stream.Stream;
 
 /** CourseSubject holds subject name and the list of course catalog (e.g CMPT 213, CMPT 225)*/
 public class CourseSubject {
-    private String subjectName;
+    private String name;
+    private long deptId;
     private List<CourseCatalog> catalogList = new ArrayList<>();
-    private List<CourseCatalog> sortedList;
 
-    public CourseSubject(String subjectName) {
-        this.subjectName = subjectName;
+    public CourseSubject(String name) {
+        this.name = name;
     }
 
     class sortByName implements Comparator<CourseSubject> {
+
         @Override
         public int compare(CourseSubject o1, CourseSubject o2) {
-            return o1.getSubjectName().compareTo(o2.getSubjectName());
+            return o1.getName().compareTo(o2.getName());
         }
+    }
+    public long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(long deptId) {
+        this.deptId = deptId;
+    }
+
+    public void setCatalogList(List<CourseCatalog> catalogList) {
+        this.catalogList = catalogList;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void sortByCatalogNumber() {
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
         Comparator<CourseCatalog> comparator = Comparator.comparing(CourseCatalog::getCatalogNumber);
         Stream<CourseCatalog> personStream = catalogList.stream().sorted(comparator);
-        sortedList = personStream.collect(Collectors.toList());
+        List<CourseCatalog> sortedList = personStream.collect(Collectors.toList());
         catalogList = sortedList;
     }
 
@@ -42,15 +58,15 @@ public class CourseSubject {
 
         CourseSubject c = (CourseSubject) obj;
 
-        return c.getSubjectName().equals(subjectName);
+        return c.getName().equals(name);
     }
 
     public List<CourseCatalog> getCatalogList() {
         return catalogList;
     }
 
-    public String getSubjectName() {
-        return subjectName;
+    public String getName() {
+        return name;
     }
 
     public int getIndex(CourseCatalog myCatalog) {

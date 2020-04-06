@@ -13,7 +13,7 @@ public class ApiSubjectWrapper {
 
     public static ApiSubjectWrapper makeCourse(CourseSubject courseSubject, long index, List<CourseCatalog> catalogList) {
         ApiSubjectWrapper wrapper = new ApiSubjectWrapper();
-        wrapper.name = courseSubject.getSubjectName();
+        wrapper.name = courseSubject.getName();
         wrapper.deptId = index;
 
         for (int i = 0; i < catalogList.size() ; i++) {

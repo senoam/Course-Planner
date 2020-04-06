@@ -3,14 +3,18 @@ package ca.cmpt213.as5.model;
 /** Offering details class contains the class details, such as the capacity
  *  and whether it's a lecture/tutorial/lab/etc */
 public class OfferingDetails {
-    private String componentCode;
-    private int total;
-    private int capacity;
+    private String type;
+    private int enrollmentTotal;
+    private int enrollmentCap;
 
-    public OfferingDetails(String componentCode, int total, int capacity) {
-        this.componentCode = componentCode;
-        this.total = total;
-        this.capacity = capacity;
+    public OfferingDetails(String type, int enrollmentTotal, int enrollmentCap) {
+        this.type = type;
+        this.enrollmentTotal = enrollmentTotal;
+        this.enrollmentCap = enrollmentCap;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -24,26 +28,26 @@ public class OfferingDetails {
 
         OfferingDetails c = (OfferingDetails) obj;
 
-        return c.getComponentCode().equals(componentCode);
+        return c.getType().equals(type);
     }
 
-    public String getComponentCode() {
-        return componentCode;
+    public String getType() {
+        return type;
     }
 
-    public int getTotal() {
-        return total;
+    public int getEnrollmentTotal() {
+        return enrollmentTotal;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int getEnrollmentCap() {
+        return enrollmentCap;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setEnrollmentTotal(int enrollmentTotal) {
+        this.enrollmentTotal = enrollmentTotal;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setEnrollmentCap(int enrollmentCap) {
+        this.enrollmentCap = enrollmentCap;
     }
 }
