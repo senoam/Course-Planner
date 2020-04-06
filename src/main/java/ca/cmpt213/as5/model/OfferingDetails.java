@@ -3,18 +3,18 @@ package ca.cmpt213.as5.model;
 /** Offering details class contains the class details, such as the capacity
  *  and whether it's a lecture/tutorial/lab/etc */
 public class OfferingDetails {
-    private String component;
+    private String type;
     private int enrollmentTotal;
     private int enrollmentCap;
 
-    public OfferingDetails(String component, int enrollmentTotal, int enrollmentCap) {
-        this.component = component;
+    public OfferingDetails(String type, int enrollmentTotal, int enrollmentCap) {
+        this.type = type;
         this.enrollmentTotal = enrollmentTotal;
         this.enrollmentCap = enrollmentCap;
     }
 
-    public void setComponent(String component) {
-        this.component = component;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -28,11 +28,11 @@ public class OfferingDetails {
 
         OfferingDetails c = (OfferingDetails) obj;
 
-        return c.getComponent().equals(component);
+        return c.getType().equals(type);
     }
 
-    public String getComponent() {
-        return component;
+    public String getType() {
+        return type;
     }
 
     public int getEnrollmentTotal() {

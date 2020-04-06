@@ -7,22 +7,13 @@ import java.util.List;
  * Course Offering contains the semester, instruction and location of a class and also a list of offering details
  */
 public class CourseOffering {
-    private List<OfferingDetails> offeringDetailsList = new ArrayList<>();
-
-    public long getCourseOfferingId() {
-        return courseOfferingId;
-    }
-
-    public void setCourseOfferingId(long courseOfferingId) {
-        this.courseOfferingId = courseOfferingId;
-    }
-
     public long courseOfferingId;
     private long semesterCode;
     private String instructors;
     private String location;
     private String term;
     private int year;
+    private List<OfferingDetails> offeringDetailsList = new ArrayList<>();
 
     public void calculateYearTerm(long semester) {
         int x, y, z, remainder, total;
@@ -116,6 +107,14 @@ public class CourseOffering {
 
     public String getLocation() {
         return location;
+    }
+
+    public long getCourseOfferingId() {
+        return courseOfferingId;
+    }
+
+    public void setCourseOfferingId(long courseOfferingId) {
+        this.courseOfferingId = courseOfferingId;
     }
 
 }

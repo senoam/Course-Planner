@@ -51,6 +51,7 @@ public class CourseController {
 //            throw new NotFound("Cannot find id");
 //        }
 //        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
+        System.out.println("deptId " + id);
         return manager.getSubjects().get((int)id).getCatalogList();
     }
 
@@ -60,6 +61,7 @@ public class CourseController {
 //            throw new NotFound("Cannot find id");
 //        }
 //        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
+        System.out.println(courseId);
         return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList();
     }
 
@@ -97,7 +99,7 @@ public class CourseController {
                          l < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().size();
                          l++) {
                         System.out.println("\t\t" + "Type=" + manager.getSubjects().get(i).getCatalogList().get(j).
-                                getOfferingList().get(k).getOfferingDetailsList().get(l).getComponent() + ", Enrollment=" +
+                                getOfferingList().get(k).getOfferingDetailsList().get(l).getType() + ", Enrollment=" +
                                 manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
                                         getOfferingDetailsList().get(l).getEnrollmentTotal() + "/" +
                                 manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
@@ -141,10 +143,13 @@ public class CourseController {
     private void sortCourseData() {
         for (int i = 0; i < manager.getSubjects().size(); i++) {
             manager.sortByCourseName();
+            manager.getSubjects().get(i).setDeptId(i);
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
                 manager.getSubjects().get(i).sortByCatalogNumber();
+                manager.getSubjects().get(i).getCatalogList().get(j).setCourseId(j);
                 for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
                     manager.getSubjects().get(i).getCatalogList().get(j).sortOfferingList();
+                    manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).setCourseOfferingId(k);
                 }
             }
         }

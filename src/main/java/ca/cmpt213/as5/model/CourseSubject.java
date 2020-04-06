@@ -11,7 +11,7 @@ public class CourseSubject {
     private String name;
     private long deptId;
     private List<CourseCatalog> catalogList = new ArrayList<>();
-    private List<CourseCatalog> sortedList;
+
     public CourseSubject(String name) {
         this.name = name;
     }
@@ -31,14 +31,6 @@ public class CourseSubject {
         this.deptId = deptId;
     }
 
-    public List<CourseCatalog> getSortedList() {
-        return sortedList;
-    }
-
-    public void setSortedList(List<CourseCatalog> sortedList) {
-        this.sortedList = sortedList;
-    }
-
     public void setCatalogList(List<CourseCatalog> catalogList) {
         this.catalogList = catalogList;
     }
@@ -51,7 +43,7 @@ public class CourseSubject {
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
         Comparator<CourseCatalog> comparator = Comparator.comparing(CourseCatalog::getCatalogNumber);
         Stream<CourseCatalog> personStream = catalogList.stream().sorted(comparator);
-        sortedList = personStream.collect(Collectors.toList());
+        List<CourseCatalog> sortedList = personStream.collect(Collectors.toList());
         catalogList = sortedList;
     }
 

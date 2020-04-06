@@ -8,14 +8,21 @@ import java.util.stream.Stream;
 
 /**Course catalog stores the catalog number and has a list of offerings*/
 public class CourseCatalog {
-    private List<CourseOffering> offeringList = new ArrayList<>();
-    private List<CourseOffering> sortedList;
+    public long courseId;
     private String catalogNumber;
+    private List<CourseOffering> offeringList = new ArrayList<>();
 
     public CourseCatalog(String catalogNumber) {
         this.catalogNumber = catalogNumber;
     }
 
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
+    }
 
     public void setOfferingList(List<CourseOffering> offeringList) {
         this.offeringList = offeringList;
@@ -30,7 +37,7 @@ public class CourseCatalog {
         Comparator<CourseOffering> comparator = Comparator.comparing(CourseOffering::getSemesterCode);
         comparator = comparator.thenComparing(Comparator.comparing(CourseOffering::getInstructors));
         Stream<CourseOffering> personStream = offeringList.stream().sorted(comparator);
-        sortedList = personStream.collect(Collectors.toList());
+        List<CourseOffering> sortedList = personStream.collect(Collectors.toList());
         offeringList = sortedList;
     }
 

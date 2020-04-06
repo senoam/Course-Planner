@@ -24,7 +24,7 @@ public class ApiCourseOfferingWrapper {
         this.semesterCode = semesterCode;
         this.year = year;
         for (OfferingDetails o : offeringDetailsList) {
-            offeringDetailsWrapperList.add(new ApiOfferingDetailsWrapper(o.getComponent(), o.getEnrollmentCap(), o.getEnrollmentTotal()));
+            offeringDetailsWrapperList.add(new ApiOfferingDetailsWrapper(o.getType(), o.getEnrollmentCap(), o.getEnrollmentTotal()));
         }
 
     }
