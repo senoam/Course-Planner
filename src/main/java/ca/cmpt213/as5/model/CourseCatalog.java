@@ -27,8 +27,8 @@ public class CourseCatalog {
 
     public void sortOfferingList() {
         //Reference for sorting https://stackoverflow.com/questions/4805606/how-to-sort-by-two-fields-in-java
-        Comparator<CourseOffering> comparator = Comparator.comparing(CourseOffering::getSemester);
-        comparator = comparator.thenComparing(Comparator.comparing(CourseOffering::getInstructor));
+        Comparator<CourseOffering> comparator = Comparator.comparing(CourseOffering::getSemesterCode);
+        comparator = comparator.thenComparing(Comparator.comparing(CourseOffering::getInstructors));
         Stream<CourseOffering> personStream = offeringList.stream().sorted(comparator);
         sortedList = personStream.collect(Collectors.toList());
         offeringList = sortedList;

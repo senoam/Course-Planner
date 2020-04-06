@@ -7,10 +7,10 @@ import java.util.List;
 
 public class ApiCourseOfferingWrapper {
     public long courseOfferingId;
-    public String location;
-    public String instructors;
-    public String term;
     public long semesterCode;
+    public String instructors;
+    public String location;
+    public String term;
     public int year;
     public List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class ApiCourseOfferingWrapper {
         this.semesterCode = semesterCode;
         this.year = year;
         for (OfferingDetails o : offeringDetailsList) {
-            offeringDetailsWrapperList.add(new ApiOfferingDetailsWrapper(o.getComponentCode(), o.getCapacity(), o.getTotal()));
+            offeringDetailsWrapperList.add(new ApiOfferingDetailsWrapper(o.getComponent(), o.getEnrollmentCap(), o.getEnrollmentTotal()));
         }
 
     }

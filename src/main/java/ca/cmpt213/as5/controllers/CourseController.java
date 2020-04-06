@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.cmpt213.as5.restapi.ApiAboutWrapper;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,45 +33,45 @@ public class CourseController {
     }
 
     @GetMapping("/api/departments")
-    public List<ApiSubjectWrapper> getCourseList() {
+    public List<CourseSubject> getCourseList() {
         sortCourseData();
-        if (subjectWrapperList.size() >= manager.getSubjects().size()) {
-            return subjectWrapperList;
-        }
-        for (int i = 0; i < manager.getSubjects().size(); i++) {
-            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i), i, manager.getSubjects().get(i).getCatalogList()));
-
-        }
-        return subjectWrapperList;
+//        if (subjectWrapperList.size() >= manager.getSubjects().size()) {
+//            return subjectWrapperList;
+//        }
+//        for (int i = 0; i < manager.getSubjects().size(); i++) {
+//            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i), i, manager.getSubjects().get(i).getCatalogList()));
+//
+//        }
+        return manager.getSubjects();
     }
 
     @GetMapping("api/departments/{id}/courses")
-    public List<ApiCourseWrapper> getCourseAtId(@PathVariable("id") long id) {
-        if (id > subjectWrapperList.size()) {
-            throw new NotFound("Cannot find id");
-        }
-        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
-        return courseWrappers;
+    public List<CourseCatalog> getCourseAtId(@PathVariable("id") long id) {
+//        if (id > subjectWrapperList.size()) {
+//            throw new NotFound("Cannot find id");
+//        }
+//        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
+        return manager.getSubjects().get((int)id).getCatalogList();
     }
 
     @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
-    public List<ApiCourseOfferingWrapper> getCourseAtOffering(@PathVariable("id") long id, @PathVariable("courseId") long courseId) {
-        if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
-            throw new NotFound("Cannot find id");
-        }
-        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
-        return courseOfferingWrapperList;
+    public List<CourseOffering> getCourseAtOffering(@PathVariable("id") long id, @PathVariable("courseId") int courseId) {
+//        if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
+//            throw new NotFound("Cannot find id");
+//        }
+//        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
+        return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList();
     }
 
     @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
-    public List<ApiOfferingDetailsWrapper> getCourseAtOfferingDetails(@PathVariable("id") long id, @PathVariable("courseId") long courseId,
+    public List<OfferingDetails> getCourseAtOfferingDetails(@PathVariable("id") long id, @PathVariable("courseId") int courseId,
                                                                       @PathVariable("offeringId") long offeringId) {
-        if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
-            throw new NotFound("Cannot find id");
-        }
-        offeringDetailsWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).
-                courseOfferingWrapperList.get((int) offeringId).offeringDetailsWrapperList;
-        return offeringDetailsWrapperList;
+//        if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
+//            throw new NotFound("Cannot find id");
+//        }
+//        offeringDetailsWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).
+//                courseOfferingWrapperList.get((int) offeringId).offeringDetailsWrapperList;
+        return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList().get((int)offeringId).getOfferingDetailsList();
     }
 
 
@@ -85,24 +84,24 @@ public class CourseController {
         for (int i = 0; i < manager.getSubjects().size(); i++) {
 
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
-                System.out.print(manager.getSubjects().get(i).getSubjectName());
+                System.out.print(manager.getSubjects().get(i).getName());
                 System.out.println(" " + manager.getSubjects().get(i).getCatalogList().get(j).getCatalogNumber());
 
                 for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
                     System.out.println("\t" + manager.getSubjects().get(i).getCatalogList().get(j).
-                            getOfferingList().get(k).getSemester() + " in " +
+                            getOfferingList().get(k).getSemesterCode() + " in " +
                             manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getLocation() +
-                            " by " + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getInstructor());
+                            " by " + manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getInstructors());
 
                     for (int l = 0;
                          l < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).getOfferingDetailsList().size();
                          l++) {
                         System.out.println("\t\t" + "Type=" + manager.getSubjects().get(i).getCatalogList().get(j).
-                                getOfferingList().get(k).getOfferingDetailsList().get(l).getComponentCode() + ", Enrollment=" +
+                                getOfferingList().get(k).getOfferingDetailsList().get(l).getComponent() + ", Enrollment=" +
                                 manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
-                                        getOfferingDetailsList().get(l).getTotal() + "/" +
+                                        getOfferingDetailsList().get(l).getEnrollmentTotal() + "/" +
                                 manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).
-                                        getOfferingDetailsList().get(l).getCapacity());
+                                        getOfferingDetailsList().get(l).getEnrollmentCap());
                     }
                 }
             }
@@ -112,6 +111,7 @@ public class CourseController {
     @PostMapping("/api/addoffering")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus addOffering(@RequestBody ApiOfferingDataWrapper wrapper) {
+//        List<CourseCatalog> list = new ArrayList<>();
         String input =
                 wrapper.semester +
                         "," + wrapper.subjectName +
@@ -121,7 +121,19 @@ public class CourseController {
                         "," + wrapper.enrollmentTotal +
                         "," + wrapper.instructor +
                         "," + wrapper.component;
+//        list.add(new CourseCatalog(wrapper.catalogNumber));
         manager.add(input);
+//        long id;
+//        for (int i = 0; i < subjectWrapperList.size(); i++) {
+//            if (subjectWrapperList.get(i).name.equals(wrapper.subjectName)) {
+//                id = subjectWrapperList.get(i).deptId;
+//                subjectWrapperList.add(ApiSubjectWrapper.makeCourse(new CourseSubject(wrapper.subjectName), id-1, list));
+//                break;
+//            } else {
+//                subjectWrapperList.add(ApiSubjectWrapper.makeCourse(new CourseSubject(wrapper.subjectName), subjectWrapperList.size(), list));
+//                break;
+//            }
+//        }
         return HttpStatus.CREATED;
     }
 

@@ -18,7 +18,7 @@ public class ReadCSVFile {
         final String SMALL_DATA_CSV = "data\\small_data.csv";
         final String COURSE_DATA_2018_CSV = "data\\course_data_2018.csv";
         try {
-            objReader = new BufferedReader(new FileReader(COURSE_DATA_2018_CSV));
+            objReader = new BufferedReader(new FileReader(SMALL_DATA_CSV));
             int i = 0;
             while ((strCurrentLine = objReader.readLine()) != null) {
 //                System.out.println(strCurrentLine);
