@@ -1,10 +1,7 @@
 package ca.cmpt213.as5.controllers;
 
 import ca.cmpt213.as5.model.*;
-import ca.cmpt213.as5.restapi.ApiAboutWrapper;
-import ca.cmpt213.as5.restapi.ApiCourseOfferingWrapper;
-import ca.cmpt213.as5.restapi.ApiCourseWrapper;
-import ca.cmpt213.as5.restapi.ApiSubjectWrapper;
+import ca.cmpt213.as5.restapi.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +19,7 @@ public class CourseController {
     List<ApiSubjectWrapper> subjectWrapperList = new ArrayList<>();
     List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
     List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
+    List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
 
 
 
@@ -61,6 +59,17 @@ public class CourseController {
         }
         courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
         return courseOfferingWrapperList;
+    }
+
+    @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
+    public List<ApiOfferingDetailsWrapper> getCourseAtOfferingDetails(@PathVariable("id")long id, @PathVariable("courseId")long courseId,
+                                                                      @PathVariable("offeringId")long offeringId) {
+        if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
+            throw new NotFound("Cannot find id");
+        }
+        offeringDetailsWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).
+                courseOfferingWrapperList.get((int) offeringId).offeringDetailsWrapperList;
+        return offeringDetailsWrapperList;
     }
 
 

@@ -15,15 +15,18 @@ public class ApiCourseWrapper {
         this.catalogNumber = catalogNumber;
         String term = "";
         int year = 0;
-        int x, y, z, remainder, a;
+        int x, y, z, remainder, total;
         int i = 0;
         for (CourseOffering c : offeringList) {
-            remainder = c.getSemester() % 1000;
-            x = c.getSemester() / 1000;
+            total = c.getSemester();
+            x = total / 1000;
+            remainder = total % 1000;
+            total = remainder;
+            y = total / 100;
             remainder = remainder % 100;
-            y = remainder / 100;
+            total = remainder;
+            z = total / 10;
             remainder = remainder % 10;
-            z = remainder / 10;
             term = getTerm(remainder);
             year = 1900 + (100 * x) + (10 * y) + (z);
             courseOfferingWrapperList.add(new ApiCourseOfferingWrapper(i, c.getLocation(), c.getInstructor(), term,

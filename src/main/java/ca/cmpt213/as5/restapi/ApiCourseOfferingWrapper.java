@@ -12,7 +12,7 @@ public class ApiCourseOfferingWrapper {
     public String term;
     public long semesterCode;
     public int year;
-    List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
+    public List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
 
 
     public ApiCourseOfferingWrapper(long courseOfferingId, String location, String instructors, String term, long semesterCode, int year,
