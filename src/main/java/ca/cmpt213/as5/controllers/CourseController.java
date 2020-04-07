@@ -19,6 +19,7 @@ public class CourseController {
     ApiAboutWrapper aboutWrapper;
     ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
+    List<Watcher> watcherList = new ArrayList<>();
     List<ApiSubjectWrapper> subjectWrapperList = new ArrayList<>();
     List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
     List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
@@ -138,6 +139,29 @@ public class CourseController {
 //        }
         return HttpStatus.CREATED;
     }
+
+    @GetMapping("/api/watchers")
+    public List<Watcher> getWatchers() {
+        return watcherList;
+    }
+
+    @PostMapping("/api/watchers")
+    @ResponseStatus(HttpStatus.CREATED)
+    public HttpStatus addWatchers(@RequestBody Watcher watcher) {
+//        System.out.println(watcher.getId());
+        watcher.setId(watcherList.size());
+        long deptId = watcher.getDeptId();
+        long courseId = watcher.getCourseId();
+        String name = manager.getSubjects().get((int) deptId).getName();
+        String catalogNumber = manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).getCatalogNumber();
+        watcher.setDepartment(new CourseSubject(name));
+        watcher.setCourse(new CourseCatalog(catalogNumber));
+        watcherList.add(watcher);
+
+
+        return HttpStatus.CREATED;
+    }
+
 
 
     private void sortCourseData() {
