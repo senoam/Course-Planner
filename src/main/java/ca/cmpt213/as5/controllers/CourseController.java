@@ -154,6 +154,7 @@ public class CourseController {
         long courseId = watcher.getCourseId();
         String name = manager.getSubjects().get((int) deptId).getName();
         String catalogNumber = manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).getCatalogNumber();
+        watcher.setName(name);
         watcher.setDepartment(new CourseSubject(name));
         watcher.setCourse(new CourseCatalog(catalogNumber));
         watcherList.add(watcher);

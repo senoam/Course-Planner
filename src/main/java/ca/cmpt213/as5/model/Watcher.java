@@ -7,7 +7,7 @@ public class Watcher {
     private long id;
     private long deptId;
     private long courseId;
-    String name;
+    private String name;
     private CourseSubject department;
     private CourseCatalog course;
     private List<String> events = new ArrayList<>();
@@ -26,6 +26,14 @@ public class Watcher {
         deptId = Long.parseLong(num[0]);
         courseId = Long.parseLong(num[1]);
         length = events.size();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public CourseSubject getDepartment() {
