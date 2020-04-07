@@ -13,13 +13,11 @@ public class Watcher implements Observer {
     private int length;
 
     public Watcher(long deptId, long courseId) {
-        System.out.println("defa: " + deptId);
         this.deptId = deptId;
         this.courseId = courseId;
     }
 
     public Watcher(String input) {
-        System.out.println("INput: " + input);
         String numbers = input.replaceAll("[^0-9]", "");
         String[] num = numbers.split("");
         deptId = Long.parseLong(num[0]);
@@ -29,7 +27,6 @@ public class Watcher implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-//        String component = course.getOfferingList().get();
         System.out.println("Observer added");
     }
 

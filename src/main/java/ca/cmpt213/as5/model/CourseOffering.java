@@ -7,7 +7,7 @@ import java.util.List;
  * Course Offering contains the semester, instruction and location of a class and also a list of offering details
  */
 public class CourseOffering {
-    public long courseOfferingId;
+    private long courseOfferingId;
     private long semesterCode;
     private String instructors;
     private String location;

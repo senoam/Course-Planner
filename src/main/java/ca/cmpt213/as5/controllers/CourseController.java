@@ -21,10 +21,6 @@ public class CourseController {
     ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
     List<Watcher> watcherList = new ArrayList<>();
-    List<ApiSubjectWrapper> subjectWrapperList = new ArrayList<>();
-    List<ApiCourseWrapper> courseWrappers = new ArrayList<>();
-    List<ApiCourseOfferingWrapper> courseOfferingWrapperList = new ArrayList<>();
-    List<ApiOfferingDetailsWrapper> offeringDetailsWrapperList = new ArrayList<>();
 
 
     @GetMapping("/api/about")
@@ -37,32 +33,25 @@ public class CourseController {
     @GetMapping("/api/departments")
     public List<CourseSubject> getCourseList() {
         sortCourseData();
-//        if (subjectWrapperList.size() >= manager.getSubjects().size()) {
-//            return subjectWrapperList;
-//        }
-//        for (int i = 0; i < manager.getSubjects().size(); i++) {
-//            subjectWrapperList.add(ApiSubjectWrapper.makeCourse(manager.getSubjects().get(i), i, manager.getSubjects().get(i).getCatalogList()));
-//
-//        }
         return manager.getSubjects();
     }
 
     @GetMapping("api/departments/{id}/courses")
     public List<CourseCatalog> getCourseAtId(@PathVariable("id") long id) {
-//        if (id > subjectWrapperList.size()) {
-//            throw new NotFound("Cannot find id");
-//        }
-//        courseWrappers = subjectWrapperList.get((int) id).courseWrapperList;
+        if (id > manager.getSubjects().size()) {
+            throw new NotFound("Cannot find id");
+        }
+
         System.out.println("deptId " + id);
         return manager.getSubjects().get((int)id).getCatalogList();
     }
 
     @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
     public List<CourseOffering> getCourseAtOffering(@PathVariable("id") long id, @PathVariable("courseId") int courseId) {
-//        if (id > subjectWrapperList.size() || courseId > courseWrappers.size()) {
-//            throw new NotFound("Cannot find id");
-//        }
-//        courseOfferingWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).courseOfferingWrapperList;
+        if (id > manager.getSubjects().size() || courseId > manager.getSubjects().get((int) id).getCatalogList().size()) {
+            throw new NotFound("Cannot find id");
+        }
+
         System.out.println(courseId);
         return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList();
     }
@@ -70,11 +59,11 @@ public class CourseController {
     @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
     public List<OfferingDetails> getCourseAtOfferingDetails(@PathVariable("id") long id, @PathVariable("courseId") int courseId,
                                                                       @PathVariable("offeringId") long offeringId) {
-//        if (id > subjectWrapperList.size() || courseId > courseWrappers.size() || offeringId > courseOfferingWrapperList.size()) {
-//            throw new NotFound("Cannot find id");
-//        }
-//        offeringDetailsWrapperList = subjectWrapperList.get((int) id).courseWrapperList.get((int) courseId).
-//                courseOfferingWrapperList.get((int) offeringId).offeringDetailsWrapperList;
+        if (id > manager.getSubjects().size() || courseId > manager.getSubjects().get((int) id).getCatalogList().size()
+                || offeringId > manager.getSubjects().get((int) id).getCatalogList().get((int) courseId).getOfferingList().size()) {
+            throw new NotFound("Cannot find id");
+        }
+
         return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList().get((int)offeringId).getOfferingDetailsList();
     }
 
@@ -115,7 +104,7 @@ public class CourseController {
     @PostMapping("/api/addoffering")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus addOffering(@RequestBody ApiOfferingDataWrapper wrapper) {
-//        List<CourseCatalog> list = new ArrayList<>();
+
         String input =
                 wrapper.semester +
                         "," + wrapper.subjectName +
@@ -125,7 +114,7 @@ public class CourseController {
                         "," + wrapper.enrollmentTotal +
                         "," + wrapper.instructor +
                         "," + wrapper.component;
-//        list.add(new CourseCatalog(wrapper.catalogNumber));
+
         manager.add(input);
         for(Watcher w : watcherList) {
             if (wrapper.subjectName.equals(w.getName()) && wrapper.catalogNumber.equals(w.getCourse().getCatalogNumber())) {
@@ -140,12 +129,15 @@ public class CourseController {
                 " / " + wrapper.enrollmentCap + ") to offering " + myOffering.getTerm() + " " + myOffering.getYear());
             }
         }
-
+        sortCourseData();
         return HttpStatus.CREATED;
     }
 
     @GetMapping("/api/watchers/{id}")
     public Watcher getWatchers(@PathVariable("id")long id) {
+        if (id >= watcherList.size()) {
+            throw new NotFound("Invalid watcher id!");
+        }
         return watcherList.get((int) id);
     }
 
@@ -157,7 +149,7 @@ public class CourseController {
     @PostMapping("/api/watchers")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus addWatchers(@RequestBody Watcher watcher) {
-//        System.out.println(watcher.getId());
+
         watcher.setId(watcherList.size());
         long deptId = watcher.getDeptId();
         long courseId = watcher.getCourseId();
@@ -170,6 +162,17 @@ public class CourseController {
         manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).addObserver(watcher);
         manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).doSomething();
         return HttpStatus.CREATED;
+    }
+
+    @DeleteMapping("/api/watchers/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public HttpStatus deleteWatcher(@PathVariable("id")long id) {
+        if (id >= watcherList.size()) {
+            throw new NotFound("Invalid watcher id!");
+        }
+        watcherList.remove((int) id);
+        sortCourseData();
+        return HttpStatus.NO_CONTENT;
     }
 
 
