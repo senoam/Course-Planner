@@ -1,9 +1,8 @@
 package ca.cmpt213.as5.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Watcher {
+public class Watcher implements Observer {
     private long id;
     private long deptId;
     private long courseId;
@@ -27,6 +26,13 @@ public class Watcher {
         courseId = Long.parseLong(num[1]);
         length = events.size();
     }
+
+    @Override
+    public void update(Observable observable, Object o) {
+//        String component = course.getOfferingList().get();
+        System.out.println("Observer added");
+    }
+
 
     public String getName() {
         return name;

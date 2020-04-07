@@ -3,17 +3,23 @@ package ca.cmpt213.as5.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**Course catalog stores the catalog number and has a list of offerings*/
-public class CourseCatalog {
+public class CourseCatalog extends Observable {
     public long courseId;
     private String catalogNumber;
     private List<CourseOffering> offeringList = new ArrayList<>();
 
     public CourseCatalog(String catalogNumber) {
         this.catalogNumber = catalogNumber;
+    }
+
+    public void doSomething() {
+        setChanged();
+        notifyObservers();
     }
 
     public long getCourseId() {

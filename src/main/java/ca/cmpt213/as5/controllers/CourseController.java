@@ -12,6 +12,7 @@ import ca.cmpt213.as5.restapi.ApiAboutWrapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -126,18 +127,26 @@ public class CourseController {
                         "," + wrapper.component;
 //        list.add(new CourseCatalog(wrapper.catalogNumber));
         manager.add(input);
-//        long id;
-//        for (int i = 0; i < subjectWrapperList.size(); i++) {
-//            if (subjectWrapperList.get(i).name.equals(wrapper.subjectName)) {
-//                id = subjectWrapperList.get(i).deptId;
-//                subjectWrapperList.add(ApiSubjectWrapper.makeCourse(new CourseSubject(wrapper.subjectName), id-1, list));
-//                break;
-//            } else {
-//                subjectWrapperList.add(ApiSubjectWrapper.makeCourse(new CourseSubject(wrapper.subjectName), subjectWrapperList.size(), list));
-//                break;
-//            }
-//        }
+        for(Watcher w : watcherList) {
+            if (wrapper.subjectName.equals(w.getName()) && wrapper.catalogNumber.equals(w.getCourse().getCatalogNumber())) {
+                long deptId = w.getDeptId();
+                long courseId = w.getCourseId();
+                manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).addObserver(w);
+                manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).doSomething();
+                Calendar now = Calendar.getInstance();
+                String msg = now.getTime().toString();
+                CourseOffering myOffering = new CourseOffering(wrapper.semester, wrapper.instructor, wrapper.location);
+                w.getEvents().add(msg + ": Added section " + wrapper.component + " with enrollment (" + wrapper.enrollmentTotal +
+                " / " + wrapper.enrollmentCap + ") to offering " + myOffering.getTerm() + " " + myOffering.getYear());
+            }
+        }
+
         return HttpStatus.CREATED;
+    }
+
+    @GetMapping("/api/watchers/{id}")
+    public Watcher getWatchers(@PathVariable("id")long id) {
+        return watcherList.get((int) id);
     }
 
     @GetMapping("/api/watchers")
@@ -155,11 +164,11 @@ public class CourseController {
         String name = manager.getSubjects().get((int) deptId).getName();
         String catalogNumber = manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).getCatalogNumber();
         watcher.setName(name);
-        watcher.setDepartment(new CourseSubject(name));
-        watcher.setCourse(new CourseCatalog(catalogNumber));
+        watcher.setDepartment(manager.getSubjects().get((int) deptId));
+        watcher.setCourse(manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId));
         watcherList.add(watcher);
-
-
+        manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).addObserver(watcher);
+        manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).doSomething();
         return HttpStatus.CREATED;
     }
 
