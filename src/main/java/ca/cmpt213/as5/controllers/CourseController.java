@@ -171,6 +171,9 @@ public class CourseController {
             throw new NotFound("Invalid watcher id!");
         }
         watcherList.remove((int) id);
+        for (int i = 0; i < watcherList.size(); i++) {
+            watcherList.get(i).setId(i);
+        }
         sortCourseData();
         return HttpStatus.NO_CONTENT;
     }
