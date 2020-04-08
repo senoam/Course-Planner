@@ -38,7 +38,7 @@ public class CourseController {
 
     @GetMapping("api/departments/{id}/courses")
     public List<CourseCatalog> getCourseAtId(@PathVariable("id") long id) {
-        if (id > manager.getSubjects().size()) {
+        if (id >= manager.getSubjects().size()) {
             throw new NotFound("Cannot find id");
         }
         return manager.getSubjects().get((int)id).getCatalogList();
@@ -46,7 +46,7 @@ public class CourseController {
 
     @GetMapping("api/departments/{id}/courses/{courseId}/offerings")
     public List<CourseOffering> getCourseAtOffering(@PathVariable("id") long id, @PathVariable("courseId") int courseId) {
-        if (id > manager.getSubjects().size() || courseId > manager.getSubjects().get((int) id).getCatalogList().size()) {
+        if (id >= manager.getSubjects().size() || courseId >= manager.getSubjects().get((int) id).getCatalogList().size()) {
             throw new NotFound("Cannot find id");
         }
         return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList();
@@ -55,8 +55,8 @@ public class CourseController {
     @GetMapping("/api/departments/{id}/courses/{courseId}/offerings/{offeringId}")
     public List<OfferingDetails> getCourseAtOfferingDetails(@PathVariable("id") long id, @PathVariable("courseId") int courseId,
                                                                       @PathVariable("offeringId") long offeringId) {
-        if (id > manager.getSubjects().size() || courseId > manager.getSubjects().get((int) id).getCatalogList().size()
-                || offeringId > manager.getSubjects().get((int) id).getCatalogList().get((int) courseId).getOfferingList().size()) {
+        if (id >= manager.getSubjects().size() || courseId >= manager.getSubjects().get((int) id).getCatalogList().size()
+                || offeringId >= manager.getSubjects().get((int) id).getCatalogList().get((int) courseId).getOfferingList().size()) {
             throw new NotFound("Cannot find id");
         }
 
@@ -145,11 +145,11 @@ public class CourseController {
 
         watcher.setId(watcherList.size());
         long deptId = watcher.getDeptId();
-        if(deptId > manager.getSubjects().size()-1){
+        if(deptId >= manager.getSubjects().size()){
             throw new NotFound("Invalid ID");
         }
         long courseId = watcher.getCourseId();
-        if(courseId > manager.getSubjects().get((int)deptId).getCatalogList().size()-1){
+        if(courseId >= manager.getSubjects().get((int)deptId).getCatalogList().size()){
             throw new NotFound("Invalid ID");
         }
         String name = manager.getSubjects().get((int) deptId).getName();
@@ -170,6 +170,9 @@ public class CourseController {
             throw new NotFound("Invalid watcher id!");
         }
         watcherList.remove((int) id);
+        for (int i = 0; i < watcherList.size(); i++) {
+            watcherList.get(i).setId(i);
+        }
         sortCourseData();
         return HttpStatus.NO_CONTENT;
     }
