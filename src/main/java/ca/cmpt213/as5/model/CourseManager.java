@@ -12,6 +12,8 @@ public class CourseManager {
     public CourseManager() {
         ReadCSVFile read = new ReadCSVFile();
         read.readCSV(this);
+        sortCourseData();
+
     }
 
     public List<CourseSubject> getSubjects() {
@@ -20,6 +22,21 @@ public class CourseManager {
 
     public void setSubjects(List<CourseSubject> subjects) {
         this.subjects = subjects;
+    }
+
+    public void sortCourseData() {
+        for (int i = 0; i < getSubjects().size(); i++) {
+            sortByCourseName();
+            getSubjects().get(i).setDeptId(i);
+            for (int j = 0; j < getSubjects().get(i).getCatalogList().size(); j++) {
+                getSubjects().get(i).sortByCatalogNumber();
+                getSubjects().get(i).getCatalogList().get(j).setCourseId(j);
+                for (int k = 0; k < getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
+                    getSubjects().get(i).getCatalogList().get(j).sortOfferingList();
+                    getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).setCourseOfferingId(k);
+                }
+            }
+        }
     }
 
     public void sortByCourseName() {

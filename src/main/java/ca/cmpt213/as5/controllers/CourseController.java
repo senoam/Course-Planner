@@ -31,7 +31,6 @@ public class CourseController {
 
     @GetMapping("/api/departments")
     public List<CourseSubject> getCourseList() {
-        sortCourseData();
         return manager.getSubjects();
     }
 
@@ -65,7 +64,7 @@ public class CourseController {
 
     @GetMapping("/api/dump-model")
     public void dumpModel() {
-        sortCourseData();
+        manager.sortCourseData();
         for (int i = 0; i < manager.getSubjects().size(); i++) {
 
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
@@ -120,7 +119,7 @@ public class CourseController {
                 " / " + wrapper.enrollmentCap + ") to offering " + myOffering.getTerm() + " " + myOffering.getYear());
             }
         }
-        sortCourseData();
+        manager.sortCourseData();
         return HttpStatus.CREATED;
     }
 
@@ -171,26 +170,13 @@ public class CourseController {
         for (int i = 0; i < watcherList.size(); i++) {
             watcherList.get(i).setId(i);
         }
-        sortCourseData();
+        manager.sortCourseData();
         return HttpStatus.NO_CONTENT;
     }
 
 
 
-    private void sortCourseData() {
-        for (int i = 0; i < manager.getSubjects().size(); i++) {
-            manager.sortByCourseName();
-            manager.getSubjects().get(i).setDeptId(i);
-            for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
-                manager.getSubjects().get(i).sortByCatalogNumber();
-                manager.getSubjects().get(i).getCatalogList().get(j).setCourseId(j);
-                for (int k = 0; k < manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().size(); k++) {
-                    manager.getSubjects().get(i).getCatalogList().get(j).sortOfferingList();
-                    manager.getSubjects().get(i).getCatalogList().get(j).getOfferingList().get(k).setCourseOfferingId(k);
-                }
-            }
-        }
-    }
+
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     static class NotFound extends RuntimeException {
