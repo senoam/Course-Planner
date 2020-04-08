@@ -1,7 +1,7 @@
 package ca.cmpt213.as5.model;
 
 import java.util.*;
-
+/**Watcher class observes course catalog*/
 public class Watcher implements Observer {
     private long id;
     private long deptId;

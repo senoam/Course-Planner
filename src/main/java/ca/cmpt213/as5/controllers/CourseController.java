@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
+/**Controller to manage REST API commands*/
 @RestController
 public class CourseController {
     ApiAboutWrapper aboutWrapper;
@@ -41,8 +41,6 @@ public class CourseController {
         if (id > manager.getSubjects().size()) {
             throw new NotFound("Cannot find id");
         }
-
-        System.out.println("deptId " + id);
         return manager.getSubjects().get((int)id).getCatalogList();
     }
 
@@ -51,8 +49,6 @@ public class CourseController {
         if (id > manager.getSubjects().size() || courseId > manager.getSubjects().get((int) id).getCatalogList().size()) {
             throw new NotFound("Cannot find id");
         }
-
-        System.out.println(courseId);
         return manager.getSubjects().get((int)id).getCatalogList().get(courseId).getOfferingList();
     }
 
@@ -71,9 +67,7 @@ public class CourseController {
     @GetMapping("/api/dump-model")
     public void dumpModel() {
         read.readCSV(manager);
-        //Sort by course offering
         sortCourseData();
-
         for (int i = 0; i < manager.getSubjects().size(); i++) {
 
             for (int j = 0; j < manager.getSubjects().get(i).getCatalogList().size(); j++) {
@@ -104,7 +98,6 @@ public class CourseController {
     @PostMapping("/api/addoffering")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpStatus addOffering(@RequestBody ApiOfferingDataWrapper wrapper) {
-
         String input =
                 wrapper.semester +
                         "," + wrapper.subjectName +
@@ -121,7 +114,7 @@ public class CourseController {
                 long deptId = w.getDeptId();
                 long courseId = w.getCourseId();
                 manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).addObserver(w);
-                manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).doSomething();
+                manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).notifyWatchers();
                 Calendar now = Calendar.getInstance();
                 String msg = now.getTime().toString();
                 CourseOffering myOffering = new CourseOffering(wrapper.semester, wrapper.instructor, wrapper.location);
@@ -152,7 +145,13 @@ public class CourseController {
 
         watcher.setId(watcherList.size());
         long deptId = watcher.getDeptId();
+        if(deptId > manager.getSubjects().size()-1){
+            throw new NotFound("Invalid ID");
+        }
         long courseId = watcher.getCourseId();
+        if(courseId > manager.getSubjects().get((int)deptId).getCatalogList().size()-1){
+            throw new NotFound("Invalid ID");
+        }
         String name = manager.getSubjects().get((int) deptId).getName();
         String catalogNumber = manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).getCatalogNumber();
         watcher.setName(name);
@@ -160,7 +159,7 @@ public class CourseController {
         watcher.setCourse(manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId));
         watcherList.add(watcher);
         manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).addObserver(watcher);
-        manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).doSomething();
+        manager.getSubjects().get((int) deptId).getCatalogList().get((int) courseId).notifyWatchers();
         return HttpStatus.CREATED;
     }
 

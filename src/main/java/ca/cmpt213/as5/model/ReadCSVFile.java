@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+/**Reads CSV File and add to list in Course Manager*/
 public class ReadCSVFile {
     public void readCSV(CourseManager manager){
         BufferedReader objReader;

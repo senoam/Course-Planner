@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**Course Manager contains list of departments**/
 public class CourseManager {
     private List<CourseSubject> subjects = new ArrayList<>();
 

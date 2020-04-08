@@ -17,7 +17,7 @@ public class CourseCatalog extends Observable {
         this.catalogNumber = catalogNumber;
     }
 
-    public void doSomething() {
+    public void notifyWatchers() {
         setChanged();
         notifyObservers();
     }
