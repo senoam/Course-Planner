@@ -9,6 +9,11 @@ import java.util.stream.Stream;
 public class CourseManager {
     private List<CourseSubject> subjects = new ArrayList<>();
 
+    public CourseManager() {
+        ReadCSVFile read = new ReadCSVFile();
+        read.readCSV(this);
+    }
+
     public List<CourseSubject> getSubjects() {
         return subjects;
     }

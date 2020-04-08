@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 public class CourseController {
     ApiAboutWrapper aboutWrapper;
-    ReadCSVFile read = new ReadCSVFile();
     CourseManager manager = new CourseManager();
     List<Watcher> watcherList = new ArrayList<>();
 
@@ -66,7 +65,6 @@ public class CourseController {
 
     @GetMapping("/api/dump-model")
     public void dumpModel() {
-        read.readCSV(manager);
         sortCourseData();
         for (int i = 0; i < manager.getSubjects().size(); i++) {
 
